@@ -28,7 +28,7 @@ def prediction(input_list):
     pred = model.predict_proba([input_list])[:, 1][0]  # Get depression probability
     
     # AI Suggestions
-   gemini_suggestion = get_ai_suggestion(pred)
+    gemini_suggestion = get_ai_suggestion(pred)
     
     if pred > 0.4:
         return f"""
