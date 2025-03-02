@@ -5,7 +5,6 @@ import openai
 import google.generativeai as genai
 
 # Load API keys
-openai.api_key = st.secrets["OPENAI_API_KEY"]
 genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 
 # Load Model
@@ -14,19 +13,14 @@ with open('final_model.pkl', 'rb') as file:
 
 # Function to get AI suggestions
 def get_ai_suggestion(probability):
-    prompt = f"Provide general mental health tips for someone with {probability*100:.0f}% depression probability."
+    prompt = f"Provide general and personalised mental health tips for someone with {probability*100:.0f}% depression probability. in both languages English and Hindi"
 
-    # GPT-4o Mini
-    gpt_response = openai.ChatCompletion.create(
-        model="gpt-4o",  # GPT-4o Mini
-        messages=[{"role": "user", "content": prompt}]
-    )["choices"][0]["message"]["content"]
 
     # Gemini 2 Flash
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")  # Gemini 2 Flash
     gemini_response = gemini_model.generate_content(prompt).text
 
-    return gpt_response, gemini_response
+    return gemini_response
 
 # Prediction Function
 def prediction(input_list):
@@ -34,20 +28,18 @@ def prediction(input_list):
     pred = model.predict_proba([input_list])[:, 1][0]  # Get depression probability
     
     # AI Suggestions
-    gpt_suggestion, gemini_suggestion = get_ai_suggestion(pred)
+   gemini_suggestion = get_ai_suggestion(pred)
     
-    if pred > 0.5:
+    if pred > 0.4:
         return f"""
         **You are more prone to depression**  
-        **Depression Probability:** {round(pred*100, 2)}%  
-        **GPT-4o Suggestion:** {gpt_suggestion}  
+        **Depression Probability:** {round(pred*100, 2)}% 
         **Gemini 2 Flash Suggestion:** {gemini_suggestion}
         """
     else:
         return f"""
         **You are less prone to depression**  
         **Depression Probability:** {round(pred*100, 2)}%  
-        **GPT-4o Suggestion:** {gpt_suggestion}  
         **Gemini 2 Flash Suggestion:** {gemini_suggestion}
         """
 
