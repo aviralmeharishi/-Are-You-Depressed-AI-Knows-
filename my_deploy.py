@@ -66,7 +66,7 @@ def main():
     input_list = [ag, gen, wp, apwp, js, cgpa, sd, dt, suc, fhmi, finstress, workstudyhr, deg]
 
     if st.button('Show Prediction'):
-    response = prediction(input_list)
+        response = prediction(input_list)
     
         if "more prone to depression" in response:
             st.error(response)  # Show result in red if prone to depression
