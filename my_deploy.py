@@ -45,7 +45,8 @@ def prediction(input_list):
 
 # Streamlit UI
 def main():
-    st.title('ARE YOU DEPRESSED? 🤔')
+    st.title("ARE YOU DEPRESSED? 🤔💭 AI KNOWS!!! 🚀🧠")
+    st.markdown("### **AN AVIRAL MEHARISHI CREATION**")
 
     ag = st.slider('Enter Your Age', 10, 100, 25)
     gen = 0 if st.selectbox('Gender', ['Female', 'Male']) == 'Female' else 1
@@ -65,8 +66,12 @@ def main():
     input_list = [ag, gen, wp, apwp, js, cgpa, sd, dt, suc, fhmi, finstress, workstudyhr, deg]
 
     if st.button('Show Prediction'):
-        response = prediction(input_list)
-        st.success(response)
+    response = prediction(input_list)
+    
+        if "more prone to depression" in response:
+            st.error(response)  # Show result in red if prone to depression
+        else:
+            st.success(response)  # Show result in green if less prone
 
 if __name__ == '__main__':
     main()
