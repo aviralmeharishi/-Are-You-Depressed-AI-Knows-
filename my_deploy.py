@@ -49,8 +49,8 @@ def prediction(input_list):
 def chatbot_response(user_input):
     prompt = f"""
     Act as a mental health chatbot providing emotional support.
-    Respond in a friendly, engaging, and positive and pampering manner.
-    also give response in english first then in hindi and then in gujrati
+    Respond in a friendly, engaging, and positive and pampering manner and make user feel that they also loved by someone.
+    also give response in english first then in hindi
     also use emoticons while chatting to make user more realistically.
     
     User: {user_input}
@@ -99,7 +99,7 @@ def main():
 
     with tab2:
         st.subheader("💬 Talk to AI for Emotional Support")
-        user_input = st.text_input("Type your message...", placeholder="How are you feeling today?")
+        user_input = st.text_input("Type your message...", placeholder="Pareshan Kyu hona jab mai Hu na baat karne k liye so tell me How are you feeling today?")
         
         if st.button("Send"):
             if user_input:
