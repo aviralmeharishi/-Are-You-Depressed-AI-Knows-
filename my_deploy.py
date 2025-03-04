@@ -49,9 +49,9 @@ def prediction(input_list):
 def chatbot_response(user_input):
     prompt = f"""
     Act as a mental health chatbot providing emotional support.
-    Respond in a friendly, engaging, and positive manner.
-    Use Hindi and English to make it comfortable for users like your response must appear in both the languages but make it simple hindi and english 
-    but dont mix both response english and hindi one should be in separate.
+    Respond in a friendly, engaging, and positive and pampering manner.
+    also give response in english first then in hindi and then in gujrati
+    also use emoticons while chatting to make user more realistically.
     
     User: {user_input}
     Chatbot:
