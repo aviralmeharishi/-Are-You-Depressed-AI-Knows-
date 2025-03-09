@@ -46,14 +46,18 @@ def prediction(input_list):
         }
 
 # Function for AI Chatbot
-def chatbot_response(user_input):
+def chatbot_response(user_name, user_input, mood):
     prompt = f"""
-    first ask their name to make it more realistic
     Act as a mental health chatbot providing emotional support.
-    Respond in a friendly, engaging, and positive and pampering manner and make user feel that they also loved by someone but in a very decent and cute manner and don't make it creep.
-    also give response in english first then in hindi and make him/her feel like they are talking to their bestfriend but use respective keywords in hindi.
-    also use emoticons while chatting to make user more realistically.
+    Respond in a friendly, engaging, and positive manner.
+    Make the user feel valued and supported like a best friend.
+    Provide responses in English first, then in Hindi.
+    Use emoticons to make the conversation feel more realistic.
+    Adapt responses based on the user's mood ({mood}).
+    If the user selects 'Other' as mood, ask them to describe their feeling.
     
+    User Name: {user_name}
+    Mood: {mood}
     User: {user_input}
     Chatbot:
     """
@@ -100,14 +104,23 @@ def main():
 
     with tab2:
         st.subheader("💬 Talk to AI for Emotional Support")
-        user_input = st.text_input("Type your message...", placeholder="Pareshan Kyu hona jab mai Hu na baat karne k liye so tell me How are you feeling today?")
+        user_name = st.text_input("Enter your name:")
+        mood = st.selectbox("How are you feeling? / Or Kaisa Mood hai Boos?", ["Happy", "Sad", "Stressed", "Anxious", "Lonely", "Nervous", "Angry", "Frustrated", "Other"])
+        user_input = st.text_input("Type your message...")
+        
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
         
         if st.button("Send"):
-            if user_input:
-                ai_response = chatbot_response(user_input)
-                st.write(f"**🤖 AI Chatbot:** {ai_response}")
+            if user_input and user_name:
+                ai_response = chatbot_response(user_name, user_input, mood)
+                st.session_state.chat_history.append((f"**{user_name}:** {user_input}", f"**🤖 AI Chatbot:** {ai_response}"))
             else:
-                st.warning("Please enter a message to start the conversation.")
+                st.warning("Please enter your name and a message to start the conversation.")
+        
+        for user_msg, bot_msg in st.session_state.chat_history:
+            st.write(user_msg)
+            st.write(bot_msg)
 
 if __name__ == '__main__':
     main()
