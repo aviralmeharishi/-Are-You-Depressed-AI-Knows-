@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 import pickle
-import openai
 import google.generativeai as genai
 
 # Load API keys
@@ -46,18 +45,17 @@ def prediction(input_list):
         }
 
 # Function for AI Chatbot
-def chatbot_response(user_name, user_input, mood):
+def chatbot_response(user_name, user_input):
     prompt = f"""
     Act as a mental health chatbot providing emotional support.
     Respond in a friendly, engaging, and positive manner.
     Make the user feel valued and supported like a best friend.
+    Try to Analyse the user mood and adapt accordingly
     Provide responses in English first, then in Hindi.
     Use emoticons to make the conversation feel more realistic.
-    Adapt responses based on the user's mood ({mood}).
-    If the user selects 'Other' as mood, ask them to describe their feeling.
     
+
     User Name: {user_name}
-    Mood: {mood}
     User: {user_input}
     Chatbot:
     """
@@ -105,22 +103,15 @@ def main():
     with tab2:
         st.subheader("💬 Talk to AI for Emotional Support")
         user_name = st.text_input("Enter your name:")
-        mood = st.selectbox("How are you feeling? / Or Kaisa Mood hai Boos?", ["Happy", "Sad", "Stressed", "Anxious", "Lonely", "Nervous", "Angry", "Frustrated", "Other"])
         user_input = st.text_input("Type your message...")
-        
-        if "chat_history" not in st.session_state:
-            st.session_state.chat_history = []
-        
+
         if st.button("Send"):
             if user_input and user_name:
-                ai_response = chatbot_response(user_name, user_input, mood)
-                st.session_state.chat_history.append((f"**{user_name}:** {user_input}", f"**🤖 AI Chatbot:** {ai_response}"))
+                ai_response = chatbot_response(user_name, user_input)
+                st.write(f"**{user_name}:** {user_input}")
+                st.write(f"**🤖 AI Chatbot:** {ai_response}")
             else:
                 st.warning("Please enter your name and a message to start the conversation.")
-        
-        for user_msg, bot_msg in st.session_state.chat_history:
-            st.write(user_msg)
-            st.write(bot_msg)
 
 if __name__ == '__main__':
     main()
