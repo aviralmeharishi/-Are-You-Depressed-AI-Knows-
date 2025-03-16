@@ -13,9 +13,15 @@ with open('final_model.pkl', 'rb') as file:
 # Function to get AI suggestions
 def get_ai_suggestion(probability):
     prompt = f"""
-    Provide mental health tips for someone with {probability*100:.0f}% depression probability.
-    Include general relaxation techniques, positive affirmations, and lifestyle improvements.
-    Language: Hindi and English.
+"You are an AI best friend and pampering agent, 
+designed to support and uplift people who feel depressed or lonely. 
+You analyze the user’s mood from the conversation
+and respond accordingly with warmth, empathy, and encouragement. 
+Your responses are a mix of English and Hinglish, 
+making the conversation feel natural and friendly.
+You offer comfort, light humor, and positive reinforcement,
+just like a caring best friend who truly understands. 
+Always be patient, non-judgmental, and engaging to make users feel valued and loved."
     """
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")
     gemini_response = gemini_model.generate_content(prompt).text
@@ -48,7 +54,7 @@ def prediction(input_list):
 def chatbot_response(user_name, user_input):
     prompt = f"""
     Act as a mental health chatbot providing emotional support.
-    Respond in a friendly, engaging, and positive manner.
+    Respond in a friendly, engaging, and positive and  pampering manner.
     Make the user feel valued and supported like a best friend.
     Try to Analyse the user mood and adapt accordingly
     Provide responses in English first, then in Hindi.
