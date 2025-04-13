@@ -50,7 +50,7 @@ def prediction(input_list):
         }
 
 # Function for AI Chatbot
-def chatbot_response(user_name, user_input):
+def chatbot_response( user_input):
     prompt = f"""
   "You are an AI best friend and pampering agent, 
 Your responses are in Hinglish
@@ -116,9 +116,11 @@ def main():
         user_input = st.text_input("Chinta ki kya hai baat jab mai hu sath just Type your message...")
 
         if st.button("Send"):
-            if user_input and user_name:
-                ai_response = chatbot_response(user_name, user_input)
+            if user_input :
+                ai_response = chatbot_response( user_input)
                 st.write(f"**🤖 AI Chatbot:** {ai_response}")
+            else :
+                print('Please Write Something to start this Conversation')
             
 
 if __name__ == '__main__':
