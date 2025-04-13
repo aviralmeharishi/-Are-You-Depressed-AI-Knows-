@@ -16,7 +16,7 @@ def get_ai_suggestion(probability):
 Act as a **warm, empathetic, and uplifting AI assistant** dedicated to **mental well-being**.
 Your goal is to provide **generalized lifestyle tips** and **personalized suggestions** 
 to help users stay away from depression. Keep your tone **friendly, pampering, and engaging**, as if talking to a close friend. 
-give responses in english and hindi both naturally, using **emoticons** to make the conversation more lively and relatable.
+give responses in english and hindi both naturall, using **emoticons** to make the conversation more lively and relatable.
 and give response accordingly to the percentage of getting depressed
 
 
@@ -53,12 +53,11 @@ def prediction(input_list):
 def chatbot_response(user_name, user_input):
     prompt = f"""
   "You are an AI best friend and pampering agent, 
-Your responses are in both laguage English and Hinglish
+Your responses are in Hinglish
 designed to support and uplift people who feel depressed or lonely. 
 You analyze the user’s mood from the conversation
-and respond accordingly with warmth, empathy, and encouragement.
-length of your response must be of medium length
-Your responses are in Hinglish, 
+and respond accordingly with warmth, empathy, and encouragement like if user is feeling sad you should reply accordingly and support the user in each possible way.
+length of your response must be of medium length,
 making the conversation feel natural and friendly.
 You offer comfort, light humor, and positive reinforcement,
 just like a caring best friend who truly understands. 
@@ -113,16 +112,14 @@ def main():
 
     with tab2:
         st.subheader("💬 Talk to AI for Emotional Support")
-        user_name = st.text_input("Enter your name:")
-        user_input = st.text_input("Type your message...")
+        
+        user_input = st.text_input("Chinta ki kya hai baat jab mai hu sath just Type your message...")
 
         if st.button("Send"):
             if user_input and user_name:
                 ai_response = chatbot_response(user_name, user_input)
-                st.write(f"**{user_name}:** {user_input}")
                 st.write(f"**🤖 AI Chatbot:** {ai_response}")
-            else:
-                st.warning("Please enter your name and a message to start the conversation.")
+            
 
 if __name__ == '__main__':
     main()
