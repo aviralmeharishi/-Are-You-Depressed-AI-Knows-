@@ -12,16 +12,28 @@ with open('final_model.pkl', 'rb') as file:
 
 # Function to get AI suggestions
 def get_ai_suggestion(probability):
+    if probability < 0.2:
+        level = "very low"
+    elif probability < 0.4:
+        level = "moderate"
+    elif probability < 0.6:
+        level = "high"
+    else:
+        level = "very high"
+
     prompt = f"""
-Act as a **warm, empathetic, and uplifting AI assistant** dedicated to **mental well-being**.
-Your goal is to provide **generalized lifestyle tips** and **personalized suggestions** 
-to help users stay away from depression. Keep your tone **friendly, pampering, and engaging**, as if talking to a close friend. 
-give responses in english and hindi both naturall, using **emoticons** to make the conversation more lively and relatable.
-and give response accordingly to the percentage of getting depressed
+You are a warm, empathetic AI friend focused on mental well-being 😊. 
+Give personalized and realistic self-care advice in Hinglish (natural mix of Hindi + English). 
+Use emoticons to keep it friendly 💬💛.
 
+The user's depression probability is **{round(probability*100, 2)}%** ({level} risk).
+Provide gentle lifestyle suggestions based on this level.
 
+Tone: Non-judgmental, supportive, human-like.
+Respond in Hinglish (both Hindi + English).
+Always close with a comforting note and encouragement 🫂.
 
-    """
+"""
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")
     gemini_response = gemini_model.generate_content(prompt).text
     return gemini_response
@@ -29,7 +41,7 @@ and give response accordingly to the percentage of getting depressed
 # Prediction Function
 def prediction(input_list):
     input_list = np.array(input_list, dtype=object)
-    pred = model.predict_proba([input_list])[:, 1][0]  # Get depression probability
+    pred = model.predict_proba([input_list])[:, 1][0]
     
     # AI Suggestions
     gemini_suggestion = get_ai_suggestion(pred)
@@ -49,34 +61,38 @@ def prediction(input_list):
             "status": "success"
         }
 
-# Function for AI Chatbot
-def chatbot_response( user_input):
-    prompt = f"""
-  "You are an AI best friend and pampering agent, 
-Your responses are in Hinglish
-designed to support and uplift people who feel depressed or lonely. 
-You analyze the user’s mood from the conversation
-and respond accordingly with warmth, empathy, and encouragement like if user is feeling sad you should reply accordingly and support the user in each possible way.
-length of your response must be of medium length,
-making the conversation feel natural and friendly.
-You offer comfort, light humor, and positive reinforcement,
-just like a caring best friend who truly understands. 
-Always be patient, non-judgmental, and engaging to make users feel valued and loved.
-everytime you will use emojis to make it more realistic experience and never let them know that you are an AI Adapt Humanization as high as possible"
-    
+# Chatbot function with history
+def chatbot_response(user_input):
+    if "chat_history" not in st.session_state:
+        st.session_state.chat_history = []
 
-    
-    User: {user_input}
-    Chatbot:
-    """
+    prompt = "\n".join([f"User: {entry['user']}\nAI: {entry['bot']}" for entry in st.session_state.chat_history])
+    prompt += f"\nUser: {user_input}\nAI:"
+
+    full_prompt = f"""
+You are a friendly, warm Hinglish-speaking AI buddy 💬🧠.
+Respond in natural Hinglish, using emojis 🥺😄 whenever it feels right.
+Support people dealing with loneliness or sadness. Your tone is like a caring dost (friend)
+always ready to listen and give them right advice and make user feel pampered if they need.
+
+Chat so far:
+{prompt}
+"""
+
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")
-    response = gemini_model.generate_content(prompt).text
+    response = gemini_model.generate_content(full_prompt).text.strip()
+
+    # Save to history
+    st.session_state.chat_history.append({
+        "user": user_input,
+        "bot": response
+    })
+
     return response
 
-# Streamlit UI
+# Streamlit App
 def main():
     st.set_page_config(page_title="Are You Depressed? 🤔💭 AI Knows!", layout="wide")
-
     st.title("ARE YOU DEPRESSED? 🤔💭 AI KNOWS!!! 🚀🧠")
     st.markdown("### **An Aviral Meharishi Creation**")
 
@@ -104,24 +120,10 @@ def main():
 
         if st.button('Show Prediction'):
             result = prediction(input_list)
-            
             if result["status"] == "danger":
                 st.error(f"{result['message']}\n{result['probability']}\n\n**🧠 AI Suggestion:** {result['suggestion']}")
             else:
                 st.success(f"{result['message']}\n{result['probability']}\n\n**🧠 AI Suggestion:** {result['suggestion']}")
 
     with tab2:
-        st.subheader("💬 Talk to AI for Emotional Support")
-        
-        user_input = st.text_input("Chinta ki kya hai baat jab mai hu sath just Type your message...")
-
-        if st.button("Send"):
-            if user_input :
-                ai_response = chatbot_response( user_input)
-                st.write(f"**🤖 AI Chatbot:** {ai_response}")
-            else :
-                print('Please Write Something to start this Conversation')
-            
-
-if __name__ == '__main__':
-    main()
+        st.subheader("💬 Talk to
