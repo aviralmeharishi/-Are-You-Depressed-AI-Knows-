@@ -135,7 +135,8 @@ def main():
             st.markdown(f"**🧍‍♂️ You:** {chat['user']}")
             st.markdown(f"**🤖 AI:** {chat['bot']}")
 
-        user_input = st.text_input("Type your message here...")
+        user_input = st.text_input("""Type your message here...
+        Tension Ki Kya Hai Baat Jb sunne ko Mai Hu Sath 😊""")
 
         if st.button("Send"):
             if user_input:
