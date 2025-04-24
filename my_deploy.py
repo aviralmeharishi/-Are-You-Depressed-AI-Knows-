@@ -127,23 +127,24 @@ def main():
 
     with tab2:
         st.subheader("""💬 Talk to AI for Emotional Support""")
-        
+    
         if "chat_history" not in st.session_state:
             st.session_state.chat_history = []
-
-        for chat in st.session_state.chat_history:
-            st.markdown(f"**🧍‍♂️ You:** {chat['user']}")
-            st.markdown(f"**🤖 AI:** {chat['bot']}")
-
+    
         user_input = st.text_input("""Type your message here...
         Tension Ki Kya Hai Baat Jb sunne ko Mai Hu Sath 😊""")
-
+    
         if st.button("Send"):
             if user_input:
                 ai_response = chatbot_response(user_input)
                 st.markdown(f"**🤖 AI:** {ai_response}")
             else:
                 st.warning("Please write something to start the conversation.")
+    
+        st.markdown("### 🧠 Chat History")
+        for chat in st.session_state.chat_history:
+            st.markdown(f"**🧍‍♂️ You:** {chat['user']}")
+            st.markdown(f"**🤖 AI:** {chat['bot']}")
 
 if __name__ == '__main__':
     main()
