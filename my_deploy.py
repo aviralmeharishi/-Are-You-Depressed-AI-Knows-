@@ -22,14 +22,14 @@ def get_ai_suggestion(probability):
         level = "very high"
 
     prompt = f"""
-You are a warm, empathetic AI friend focused on mental well-being. 
-Give personalized and realistic self-care advice in Hinglish (mix of Hindi and English). 
+You are a warm, empathetic AI friend focused on mental well-being act like a well certified psychologist. 
+Give personalized and realistic self-care advice in English and Hindi. 
 Use friendly emojis (💬💛) and comforting tone.
 
 The user's depression probability is **{round(probability*100, 2)}%** ({level} risk).
 Provide 2-3 gentle, practical lifestyle suggestions for this level.
 
-Tone: Supportive, non-judgmental, pampering but not overly dramatic.
+Tone: Supportive, non-judgmental as well as professional 
 Close with a sweet encouragement and positive energy 🫂.
 """
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")
@@ -57,24 +57,32 @@ def prediction(input_list):
             "status": "success"
         }
 
-# AI chatbot function (no chat history)
-def chatbot_response(user_input):
-    prompt = f"""
-You are a caring and cheerful AI friend. Respond in a warm, soft and pampering tone.
+# Chatbot function with optional chat history
+def chatbot_response(user_input, chat_enabled, history_list):
+    base_prompt = """
+You are a caring, supportive and cheerful AI friend. Respond in a warm, soft and pampering and decent tone.
 Help people feel better, pampered a little, and emotionally supported.
 
-**Response format:**
+Response format:
 1. Start with a short English response.
 2. Repeat it in Hinglish (mix of Hindi and English).
 Use friendly emojis occasionally (😊, 💛, 🌸) but don't overdo it.
 
 Avoid sounding robotic. Talk like a close dost.
-
-User: {user_input}
-AI:
 """
+
+    if chat_enabled and history_list:
+        history_prompt = "\n".join([f"User: {m['user']}\nAI: {m['ai']}" for m in history_list])
+        prompt = f"{base_prompt}\n\nPrevious Conversation:\n{history_prompt}\n\nUser: {user_input}\nAI:"
+    else:
+        prompt = f"{base_prompt}\nUser: {user_input}\nAI:"
+
     gemini_model = genai.GenerativeModel("gemini-1.5-flash")
     response = gemini_model.generate_content(prompt).text.strip()
+
+    if chat_enabled:
+        history_list.append({"user": user_input, "ai": response})
+
     return response
 
 # Streamlit App UI
@@ -117,12 +125,16 @@ def main():
     with tab2:
         st.subheader("💬 Talk to AI for Emotional Support")
 
-        user_input = st.text_input("Type your message here...")
+        chat_enabled = st.sidebar.toggle("Enable Chat History", value=False)
+        if "chat_history" not in st.session_state:
+            st.session_state.chat_history = []
+
+        user_input = st.text_input("Type your message here... Chinta ki Kya hai Baat Jab Mai Hu Sath")
 
         if st.button("Send"):
             if user_input:
-                ai_response = chatbot_response(user_input)
-                st.markdown(f"**🤖 AI:** {ai_response}")
+                response = chatbot_response(user_input, chat_enabled, st.session_state.chat_history)
+                st.markdown(f"**🤖 AI:** {response}")
             else:
                 st.warning("Please write something to start the conversation.")
 
