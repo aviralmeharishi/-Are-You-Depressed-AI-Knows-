@@ -27,7 +27,7 @@ Give personalized and realistic self-care advice in English and Hindi.
 Use friendly emojis (💬💛) and comforting tone.
 
 The user's depression probability is **{round(probability*100, 2)}%** ({level} risk).
-Provide few detailed gentle, practical lifestyle suggestions for this level.
+Provide few detailed gentle, practical lifestyle suggestions for this level and try to make them personalised.
 
 Tone: Supportive, non-judgmental as well as professional 
 Close with a sweet encouragement and positive energy 🫂.
