@@ -32,7 +32,7 @@ Provide few detailed gentle, practical lifestyle suggestions for this level and 
 Tone: Supportive, non-judgmental as well as professional 
 Close with a sweet encouragement and positive energy 🫂.
 """
-    gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+    gemini_model = genai.GenerativeModel("gemini-1.5-flash-latest")
     gemini_response = gemini_model.generate_content(prompt).text
     return gemini_response
 
