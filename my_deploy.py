@@ -77,7 +77,7 @@ Avoid sounding robotic. Talk like a close dost.
     else:
         prompt = f"{base_prompt}\nUser: {user_input}\nAI:"
 
-    gemini_model = genai.GenerativeModel("gemini-1.5-flash")
+    gemini_model = genai.GenerativeModel("gemini-2.5-flash")
     response = gemini_model.generate_content(prompt).text.strip()
 
     if chat_enabled:
